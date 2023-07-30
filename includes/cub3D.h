@@ -6,7 +6,7 @@
 /*   By: snocita <snocita@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 09:00:57 by snocita           #+#    #+#             */
-/*   Updated: 2023/07/30 12:02:39 by snocita          ###   ########.fr       */
+/*   Updated: 2023/07/30 14:14:53 by snocita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 # include <fcntl.h>
 # include <limits.h>
 # include <stdlib.h>
-# include "../minilibx/mlx.h"
+# include "../minilibx_mac/mlx.h"
+# include "../libft/libft.h"
 
 typedef struct s_el		t_el;
 typedef struct s_gen	t_gen;

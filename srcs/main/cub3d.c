@@ -6,7 +6,7 @@
 /*   By: snocita <snocita@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 08:45:35 by snocita           #+#    #+#             */
-/*   Updated: 2023/07/30 12:18:20 by snocita          ###   ########.fr       */
+/*   Updated: 2023/07/30 14:16:43 by snocita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,9 @@ int	main(int ac, char **av)
 		printf("Good to go!\n");
 	else
 		printf("Not correct!\n");
-	// mlx_ptr = mlx_init();
-	// mlx_destroy_display(mlx_ptr);
-	// free(mlx_ptr);
+	mlx_ptr = mlx_init();
+	mlx_destroy_display(mlx_ptr);
+	free(mlx_ptr);
 	free_struct(&gen);
 	return (SUCCESS);
 }
