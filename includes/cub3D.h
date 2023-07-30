@@ -6,7 +6,7 @@
 /*   By: snocita <samuelnocita@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 09:00:57 by snocita           #+#    #+#             */
-/*   Updated: 2023/07/29 14:20:34 by snocita          ###   ########.fr       */
+/*   Updated: 2023/07/29 22:47:19 by snocita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ typedef struct s_el
 
 typedef struct s_gen
 {
-    t_el elements[7];
-    int el_num;
+    t_el    elements[7];
+    int     el_num;
+    char    *buffered_map;
 } t_gen;
 
 #include "../libft/libft.h"
@@ -36,13 +37,14 @@ typedef struct s_gen
 #include <fcntl.h>
 #include <limits.h>
 #include <stdlib.h>
-#include "../minilibx-linux/mlx_int.h"
-#include "../minilibx-linux/mlx.h"
+#include "../srcs/minilibx-linux/mlx_int.h"
+#include "../srcs/minilibx-linux/mlx.h"
 
 int error_message(int num);
 int check_format(char *map_file_name);
 int check_compliancy(int ac, char **av);
 int check_file_content(char *map, t_gen *gen);
 int main(int ac, char **av);
+int parse(t_gen *gen, char *buf);
 
 #endif

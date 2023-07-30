@@ -6,7 +6,7 @@
 /*   By: snocita <samuelnocita@gmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 08:45:35 by snocita           #+#    #+#             */
-/*   Updated: 2023/07/29 14:18:42 by snocita          ###   ########.fr       */
+/*   Updated: 2023/07/29 23:17:13 by snocita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int error_message(int num)
         printf("ERROR!\nWrong Amount of Arguments!\n");
     if (num == 2)
         printf("ERROR!\nInput file format is not compliant\n");
+    if (num == 3)
+        printf("ERROR!\nError found while validating map\n");
     return (num);
 }
 
@@ -34,6 +36,7 @@ int check_format(char *map_file_name)
         map_file_name++;
     if ((*(map_file_name + 1) != 'c') || (*(map_file_name + 2) != 'u') || (*(map_file_name + 3) != 'b'))
         ret = error_message(2);
+    printf("Passed this test\n");
     return (ret);
 }
 
@@ -64,7 +67,7 @@ char *get_path(char *element, int mode)
     return (ft_substr(element, 0, get_length(element)));
 }
 
-void register_in_struct(t_gen   *gen, char *buf, char letter, int mode)
+void register_in_struct(t_gen *gen, char *buf, char letter, int mode)
 {
     printf("LETTER IS: %c\n", letter);
     gen->elements[gen->el_num].id = letter;
@@ -77,8 +80,8 @@ void register_in_struct(t_gen   *gen, char *buf, char letter, int mode)
 
 int check_element(t_gen *gen, char *buf)
 {
-    int     ret;
-    int     i;
+    int ret;
+    int i;
 
     i = 0;
     ret = SUCCESS;
@@ -136,6 +139,7 @@ int check_element(t_gen *gen, char *buf)
             ret++;
         }
     }
+    gen->buffered_map = buf;
     if (gen->el_num == 6)
         return (ret * 0);
     else
@@ -153,16 +157,18 @@ int parse(t_gen *gen, char *buf)
             ret = FAILURE;
         buf++;
     }
-    return (SUCCESS);
+    return (ret);
 }
 
 int check_file_content(char *map, t_gen *gen)
 {
     int fd;
-    char buf[9999];
+    char buf[999];
     fd = open(map, O_RDONLY);
-    read(fd, buf, 9999);
+    read(fd, buf, 999);
     parse(gen, buf);
+    gen->buffered_map = ft_strdup(buf);
+    // printf("!!LETTER: %c\n", gen->buffered_map[1]);
     printf("Parsing completed!\n");
     close(fd);
 }
@@ -177,13 +183,14 @@ int compliancy_check(int ac, char **av, t_gen *gen)
         ret = error_message(1);
     else if (check_format(av[1]) != SUCCESS)
     {
+        printf("hello\n");
         ret = FAILURE;
-        check_file_content(av[1], gen);
     }
+    check_file_content(av[1], gen);
     return (ret);
 }
 
-void free_struct(t_gen  *gen)
+void free_struct(t_gen *gen)
 {
     free(gen->elements[0].path);
     free(gen->elements[1].path);
@@ -191,6 +198,24 @@ void free_struct(t_gen  *gen)
     free(gen->elements[3].path);
     free(gen->elements[4].path);
     free(gen->elements[5].path);
+}
+
+int perimeter_check(t_gen   *gen)
+{
+    int ret;
+
+    ret = SUCCESS;
+    int i;
+
+    i = 0;
+    while (gen->buffered_map[i])
+    if (!gen->buffered_map || ft_strchr(gen->buffered_map, 'N') == NULL
+        || ft_strchr(gen->buffered_map, 'S') == NULL
+        || ft_strchr(gen->buffered_map, 'E') == NULL
+        || ft_strchr(gen->buffered_map, 'W') == NULL)
+        ret = error_message(3);
+    
+    return (ret);
 }
 
 // TODO:
@@ -207,19 +232,24 @@ void free_struct(t_gen  *gen)
 //  TEXTURE SETUP
 int main(int ac, char **av)
 {
-    t_gen   gen;
-    void    *mlx_ptr;
+    t_gen gen;
+    void *mlx_ptr;
     int i;
 
     i = 0;
     gen.el_num = 0;
+    gen.buffered_map = NULL;
     while (i < 6)
         gen.elements[i++].path = NULL;
     if (compliancy_check(ac, av, &gen) != SUCCESS)
         return (1);
-    mlx_ptr = mlx_init();
-    mlx_destroy_display(mlx_ptr);
-    free(mlx_ptr);
+    if (perimeter_check(&gen) != SUCCESS)
+        return (FAILURE);
+    else
+        printf("Good to go!\n");
+    // mlx_ptr = mlx_init();
+    // mlx_destroy_display(mlx_ptr);
+    // free(mlx_ptr);
     free_struct(&gen);
     return (SUCCESS);
 }
