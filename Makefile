@@ -2,16 +2,25 @@ NAME		= cub3d
 
 CC			= gcc
 FLAGS		= -Wall -Wextra -Werror
-MLXFLAGS	= -lX11 -lXext
+# MLXFLAGS	= -lX11 -lXext
 RM			= rm -rf
 
 INCLUDES	= -I /usr/local/include
-LIBFT		= -L libft -lft -L
-LIBMLX		= -L /usr/local/lib
+LIBFT		= -L libft -lft
+# LIBMLX		= -L /usr/local/lib
+
+MINILIBX_PATH	=	./minilibx
+MINILIBX		=	$(MINILIBX_PATH)/libmlx.a
 
 MAIN		= cub3d
+FREE		= free
+PARSING		= parsing
+ERROR		= error
 
-SRC			= $(addsuffix .c, $(addprefix srcs/main/, $(MAIN)))
+SRC			= $(addsuffix .c, $(addprefix srcs/main/, $(MAIN))) \
+			$(addsuffix .c, $(addprefix srcs/free/, $(FREE))) \
+			$(addsuffix .c, $(addprefix srcs/parsing/, $(PARSING))) \
+			$(addsuffix .c, $(addprefix srcs/error/, $(ERROR)))
 
 OBJ			= $(SRC:c=o)
 OBJDIR		= obj_files
@@ -25,7 +34,7 @@ all:		$(NAME)
 
 $(NAME):	$(OBJDIR) $(OBJ)
 	@make -sC libft/
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT) $(MLXFLAGS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT) $(MINILIBX) $(MLXFLAGS)
 
 %.o: %.c
 	@${CC} ${CFLAGS} -c $< -o $@
