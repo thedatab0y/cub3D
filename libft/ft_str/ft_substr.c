@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snocita <snocita@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/30 11:03:43 by snocita           #+#    #+#             */
-/*   Updated: 2023/08/08 13:17:30 by snocita          ###   ########.fr       */
+/*   Created: 2023/01/30 02:56:22 by amurawsk          #+#    #+#             */
+/*   Updated: 2023/07/22 15:24:54 by snocita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3D.h"
+#include "../libft.h"
 
-int	free_struct(t_gen *gen, int ret)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	t_gen	*ref;
+	char	*str;
 
-	ref = gen;
-	free(ref->elements[0].path);
-	free(ref->elements[1].path);
-	free(ref->elements[2].path);
-	free(ref->elements[3].path);
-	free(ref->elements[4].path);
-	free(ref->elements[5].path);
-	free(ref->map_file);
-	free(ref->only_map_flat);
-	free_double_arr(ref->buffered_map);
-	free(ref);
-	return (ret);
+	if (!s)
+		return (0);
+	if (ft_strlen(s) <= start)
+		return (ft_strdup(""));
+	if (ft_strlen(s + start) < len)
+		len = ft_strlen(s + start);
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, s + start, len + 1);
+	return (str);
 }

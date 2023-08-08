@@ -1,56 +1,53 @@
 NAME		= cub3d
 
 CC			= gcc
-FLAGS		= -Wall -Wextra -Werror
-# MLXFLAGS	= -lX11 -lXext
+MLXFLAG		= -I./minilibx -L./minilibx_mac -lmlx -framework OpenGL -framework AppKit
+FLAGS		= -Werror -Wextra -Wall -g
 RM			= rm -rf
 
 INCLUDES	= -I /usr/local/include
 LIBFT		= -L libft -lft
-# LIBMLX		= -L /usr/local/lib
 
-MINILIBX_PATH	=	./minilibx
+MINILIBX_PATH	=	./minilibx_mac
 MINILIBX		=	$(MINILIBX_PATH)/libmlx.a
 
 MAIN		= cub3d
 FREE		= free
-PARSING		= parsing
+PARSING		= parsing wall_algo wall_algo_two
 ERROR		= error
+UTILS		= utils dimentions
 
-SRC			= $(addsuffix .c, $(addprefix srcs/main/, $(MAIN))) \
+SRC			= $(addsuffix .c, $(addprefix srcs/cub3d/, $(MAIN))) \
 			$(addsuffix .c, $(addprefix srcs/free/, $(FREE))) \
 			$(addsuffix .c, $(addprefix srcs/parsing/, $(PARSING))) \
+			$(addsuffix .c, $(addprefix srcs/utils/, $(UTILS))) \
 			$(addsuffix .c, $(addprefix srcs/error/, $(ERROR)))
 
 OBJ			= $(SRC:c=o)
 OBJDIR		= obj_files
 
-MAIN		= cub3d
-# PARSER = $(addprefix parser/, parser)
-
-# UTILS = $(addprefix utils/, ft_strlen)
-
 all:		$(NAME)
 
-$(NAME):	$(OBJDIR) $(OBJ)
+$(NAME):	$(OBJ)
 	@make -sC libft/
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT) $(MINILIBX) $(MLXFLAGS)
+	@$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIBFT)
 
 %.o: %.c
-	@${CC} ${CFLAGS} -c $< -o $@
-
-$(OBJDIR):
-	@mkdir $(OBJDIR)
+	@${CC} ${FLAGS} -c $< -o $@
 
 clean:
 	@make clean -C libft/
-	@rm -f obj/$(OBJ)
+	@rm -rf srcs/cub3d/cub3d.o
+	@rm -rf srcs/error/error.o
+	@rm -rf srcs/free/free.o
+	@rm -rf srcs/parsing/parsing.o
+	@rm -rf srcs/parsing/wall_algo.o
+	@rm -rf srcs/parsing/wall_algo_two.o
+	@rm -rf srcs/utils/dimentions.o
+	@rm -rf srcs/utils/utils.o
 
-fclean:
+fclean: clean
 	@make fclean -C libft/
-	@rm -f obj/*.o
-	@rm -rf obj/
-	@rm srcs/main/*.o
 	@rm -f $(NAME)
 	@rm -rf cub3d
 

@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "mlx_int.h": "c",
-        "mlx.h": "c"
-    }
+		"mlx_int.h": "c",
+		"mlx.h": "c",
+		"limits.h": "c"
+	}
 }

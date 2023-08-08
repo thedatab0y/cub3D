@@ -1,31 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_double_strdup.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snocita <snocita@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/30 11:03:43 by snocita           #+#    #+#             */
-/*   Updated: 2023/08/08 13:17:30 by snocita          ###   ########.fr       */
+/*   Created: 2023/06/13 17:08:48 by snocita           #+#    #+#             */
+/*   Updated: 2023/07/28 17:35:15 by snocita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3D.h"
+#include "../libft.h"
 
-int	free_struct(t_gen *gen, int ret)
+char	**ft_double_strdup(char **envp)
 {
-	t_gen	*ref;
+	char	**myenvp;
+	int		i;
 
-	ref = gen;
-	free(ref->elements[0].path);
-	free(ref->elements[1].path);
-	free(ref->elements[2].path);
-	free(ref->elements[3].path);
-	free(ref->elements[4].path);
-	free(ref->elements[5].path);
-	free(ref->map_file);
-	free(ref->only_map_flat);
-	free_double_arr(ref->buffered_map);
-	free(ref);
-	return (ret);
+	i = 0;
+	while (envp[i])
+		i++;
+	i += 1000;
+	myenvp = (char **)malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (envp[i])
+	{
+		if (envp[i] == NULL)
+			continue ;
+		myenvp[i] = malloc(sizeof(char) * (ft_strlen(envp[i]) + 1000));
+		strcpy(myenvp[i], envp[i]);
+		i++;
+	}
+	myenvp[i] = NULL;
+	return (myenvp);
 }
