@@ -1,54 +1,43 @@
-NAME		= cub3d
+NAME = cub3D
 
-CC			= gcc
-MLXFLAG		= -I./minilibx -L./minilibx_mac -lmlx -framework OpenGL -framework AppKit
-FLAGS		= -Werror -Wextra -Wall -g
-RM			= rm -rf
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+MLXFLAG = -L./libs/minilibx_mac -lmlx -framework OpenGL -framework AppKit
 
-INCLUDES	= -I /usr/local/include
-LIBFT		= -L libft -lft
+RM = rm -rf
 
-MINILIBX_PATH	=	./minilibx_mac
-MINILIBX		=	$(MINILIBX_PATH)/libmlx.a
+MLX_DIR = ./libs/minilibx_mac
+MLXLIB = $(MLX_DIR)/libmlx.a
 
-MAIN		= cub3d
-FREE		= free
-PARSING		= parsing wall_algo wall_algo_two
-ERROR		= error
-UTILS		= utils dimentions
+LIBFT_DIR = ./libs/libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
-SRC			= $(addsuffix .c, $(addprefix srcs/cub3d/, $(MAIN))) \
-			$(addsuffix .c, $(addprefix srcs/free/, $(FREE))) \
-			$(addsuffix .c, $(addprefix srcs/parsing/, $(PARSING))) \
-			$(addsuffix .c, $(addprefix srcs/utils/, $(UTILS))) \
-			$(addsuffix .c, $(addprefix srcs/error/, $(ERROR)))
+SRCS = cub3d.c init.c parsing/free/free.c move.c run.c run_util.c raycast.c\
+		parsing/parsing/parsing.c preset.c parsing/parsing/wall_algo_two.c parsing/parsing/parse_color.c utils.c
+SRCS := $(addprefix srcs/, $(SRCS))
 
-OBJ			= $(SRC:c=o)
-OBJDIR		= obj_files
+GNL_SRCS	= gnl/get_next_line.c gnl/get_next_line_utils.c
 
-all:		$(NAME)
+OBJS = $(SRCS:.c=.o) $(GNL_SRCS:.c=.o)
 
-$(NAME):	$(OBJ)
-	@make -sC libft/
-	@$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIBFT)
+all : $(NAME)
 
-%.o: %.c
-	@${CC} ${FLAGS} -c $< -o $@
+$(NAME) : $(OBJS)
+	@make -C $(MLX_DIR)
+	@make -C $(LIBFT_DIR)
+	@$(CC) $(CFLAGS) -I ./ $(OBJS) $(LIBFT) $(MLXFLAG) -o $@
 
-clean:
-	@make clean -C libft/
-	@rm -rf srcs/cub3d/cub3d.o
-	@rm -rf srcs/error/error.o
-	@rm -rf srcs/free/free.o
-	@rm -rf srcs/parsing/parsing.o
-	@rm -rf srcs/parsing/wall_algo.o
-	@rm -rf srcs/parsing/wall_algo_two.o
-	@rm -rf srcs/utils/dimentions.o
-	@rm -rf srcs/utils/utils.o
+clean :
+	@make -C $(MLX_DIR) clean
+	@make -C $(LIBFT_DIR) clean
+	@$(RM) $(OBJS)
 
-fclean: clean
-	@make fclean -C libft/
-	@rm -f $(NAME)
-	@rm -rf cub3d
+fclean : clean
+	@make -C $(LIBFT_DIR) fclean
+	@$(RM) $(NAME)
 
-re:		fclean all
+re : 
+	@make fclean
+	@make all
+
+.PHONY : all clean fclean re
